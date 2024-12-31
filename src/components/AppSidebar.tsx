@@ -1,9 +1,13 @@
 "use client";
 
+import Link from "next/link";
+
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
+    SidebarGroup,
+    SidebarGroupContent,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
@@ -11,7 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { List, LogOut, Plus, QrCodeIcon, Trash } from "lucide-react";
 import { Button } from "./ui/button";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const items = [
     {
@@ -43,22 +47,29 @@ export function AppSidebar() {
                 </div>
             </SidebarHeader>
             <SidebarContent>
-                <SidebarMenu className="px-3 py-2">
-                    {items.map((item) => (
-                        <SidebarMenuItem className="my-1" key={item.title}>
-                            <SidebarMenuButton
-                                className="py-5"
-                                asChild
-                                isActive={pathname === item.url}
-                            >
-                                <a href={item.url}>
-                                    <item.icon />
-                                    <span>{item.title}</span>
-                                </a>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                    ))}
-                </SidebarMenu>
+                <SidebarGroup>
+                    <SidebarGroupContent>
+                        <SidebarMenu className="px-3 py-2">
+                            {items.map((item) => (
+                                <SidebarMenuItem
+                                    className="my-1"
+                                    key={item.title}
+                                >
+                                    <SidebarMenuButton
+                                        className="py-5"
+                                        asChild
+                                        isActive={pathname === item.url}
+                                    >
+                                        <Link href={item.url}>
+                                            <item.icon />
+                                            <span>{item.title}</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
                 <Button className="w-full flex items-center justify-center bg-red-500 hover:bg-red-700">

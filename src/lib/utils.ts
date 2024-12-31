@@ -87,16 +87,14 @@ export const downloadPNGorJPG = (
         canvas.width = img.width;
         canvas.height = img.height;
         if (ctx) {
-            // Draw the QR code first
             ctx.drawImage(img, 0, 0);
 
-            // Draw the logo on top if provided
             if (logoURL) {
                 const logoImage = new Image();
                 logoImage.onload = () => {
-                    const logoSize = img.width * 0.2; // Logo size (20% of QR width)
-                    const logoX = img.width / 2 - logoSize / 2; // Center the logo
-                    const logoY = img.height / 2 - logoSize / 2; // Center the logo
+                    const logoSize = img.width * 0.2;
+                    const logoX = img.width / 2 - logoSize / 2;
+                    const logoY = img.height / 2 - logoSize / 2;
                     ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
                     const dataUrl = canvas.toDataURL(format);
                     const link = document.createElement("a");
@@ -110,7 +108,6 @@ export const downloadPNGorJPG = (
                 };
                 logoImage.src = logoURL;
             } else {
-                // No logo, just download the QR code image
                 const dataUrl = canvas.toDataURL(format);
                 const link = document.createElement("a");
                 link.href = dataUrl;

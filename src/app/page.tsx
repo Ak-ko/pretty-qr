@@ -67,7 +67,7 @@ export default function NewQr() {
     const onSubmit = (values: z.infer<typeof validationSchema>) => {
         setQrLink(values.link);
 
-        if (values?.link) {
+        if (values?.logo) {
             setImgSrc(URL.createObjectURL(values?.logo as File));
         }
     };
@@ -206,7 +206,7 @@ export default function NewQr() {
                         size={180}
                         imageSettings={{
                             src: imgSrc as string,
-                            width: 50,
+                            width: 80,
                             height: 50,
                             excavate: false,
                         }}
