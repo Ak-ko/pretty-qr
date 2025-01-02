@@ -26,7 +26,7 @@ const items = [
     },
     {
         title: "Your QR Codes",
-        url: "#",
+        url: "/qr-codes",
         icon: List,
     },
     {

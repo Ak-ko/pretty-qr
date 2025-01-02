@@ -1,9 +1,8 @@
 import "./globals.css";
 
-import AppNavBar from "@/components/AppNavBar";
 import Providers from "../context/providers";
 
-import { AppSidebar } from "@/components/AppSidebar";
+import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -33,6 +32,7 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <Providers>{children}</Providers>
+                <Toaster />
             </body>
         </html>
     );

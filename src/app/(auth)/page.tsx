@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import qrCRUD from "@/lib/qr";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,9 +21,8 @@ import { Download, QrCode, SaveIcon } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import Loader from "@/components/Loader";
 import { downloadPNGorJPG, downloadSVG } from "@/lib/utils";
-import { useClerk, useSession, useUser } from "@clerk/nextjs";
-import { createSupabaseClient } from "@/utils/supabase/server";
-import qrCRUD from "@/lib/qr";
+import { useSession, useUser } from "@clerk/nextjs";
+import { useToast } from "@/hooks/use-toast";
 
 const validationSchema = z.object({
     link: z
@@ -53,6 +53,9 @@ const validationSchema = z.object({
 
 export default function NewQr() {
     const { user } = useUser();
+    const { session } = useSession();
+    const { toast } = useToast();
+
     const form = useForm<z.infer<typeof validationSchema>>({
         resolver: zodResolver(validationSchema),
         defaultValues: {
@@ -66,7 +69,7 @@ export default function NewQr() {
     const [preview, setPreview] = useState<string | null>(null);
     const [imgSrc, setImgSrc] = useState<string | null>(null);
 
-    const { createQR } = qrCRUD();
+    const { createQR, submitting } = qrCRUD();
 
     const qrRef = useRef<SVGSVGElement | null>(null);
 
@@ -111,10 +114,27 @@ export default function NewQr() {
     };
 
     const saveQR = async () => {
-        await createQR({
+        const clerkToken = await session?.getToken({
+            template: "supabase",
+        });
+
+        const { error } = await createQR({
             link: qrLink as string,
             photo: imgSrc || "",
             user_id: user?.id as string,
+            token: clerkToken as string,
+        });
+
+        if (error) {
+            toast({
+                title: "Something wrong with saving",
+                variant: "destructive",
+            });
+        }
+
+        toast({
+            title: "Saved Successfully.",
+            description: "You can check in your qr codes section.",
         });
     };
 
@@ -227,6 +247,7 @@ export default function NewQr() {
                     />
                     <div className="flex items-center gap-3 mt-5">
                         <Button
+                            disabled={submitting}
                             onClick={saveQR}
                             className="flex items-center gap-2 justify-center"
                         >
