@@ -16,10 +16,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Download, QrCode } from "lucide-react";
+import { Download, QrCode, SaveIcon } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import Loader from "@/components/Loader";
 import { downloadPNGorJPG, downloadSVG } from "@/lib/utils";
+import { useClerk, useSession, useUser } from "@clerk/nextjs";
+import { createSupabaseClient } from "@/utils/supabase/server";
+import qrCRUD from "@/lib/qr";
 
 const validationSchema = z.object({
     link: z
@@ -49,6 +52,7 @@ const validationSchema = z.object({
 });
 
 export default function NewQr() {
+    const { user } = useUser();
     const form = useForm<z.infer<typeof validationSchema>>({
         resolver: zodResolver(validationSchema),
         defaultValues: {
@@ -61,6 +65,8 @@ export default function NewQr() {
     const [loading, setLoading] = useState(false);
     const [preview, setPreview] = useState<string | null>(null);
     const [imgSrc, setImgSrc] = useState<string | null>(null);
+
+    const { createQR } = qrCRUD();
 
     const qrRef = useRef<SVGSVGElement | null>(null);
 
@@ -102,6 +108,14 @@ export default function NewQr() {
         if (!qrRef) return;
 
         downloadPNGorJPG(qrRef, "image/jpeg", imgSrc);
+    };
+
+    const saveQR = async () => {
+        await createQR({
+            link: qrLink as string,
+            photo: imgSrc || "",
+            user_id: user?.id as string,
+        });
     };
 
     return (
@@ -212,6 +226,13 @@ export default function NewQr() {
                         }}
                     />
                     <div className="flex items-center gap-3 mt-5">
+                        <Button
+                            onClick={saveQR}
+                            className="flex items-center gap-2 justify-center"
+                        >
+                            <SaveIcon />
+                            <div>Save</div>
+                        </Button>
                         <Button
                             onClick={handleDownloadSVG}
                             className="flex items-center gap-2 justify-center"
