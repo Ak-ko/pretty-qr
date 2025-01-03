@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Loader from "@/components/Loader";
 import CreateQrForm, {
     qrCodeCreateValidationSchema,
 } from "@/components/qr/CreateQrForm";
@@ -11,6 +10,11 @@ import PhotoDownloadBtn from "@/components/qr/PhotoDownloadBtn";
 
 import { z } from "zod";
 import { QRCodeSVG } from "qrcode.react";
+import dynamic from "next/dynamic";
+
+const Loader = dynamic(() => import("@/components/Loader"), {
+    ssr: false,
+});
 
 export default function NewQr() {
     const [qrLink, setQrLink] = useState("");

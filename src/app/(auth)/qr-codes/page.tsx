@@ -2,9 +2,9 @@
 
 import React, { ChangeEvent, useState } from "react";
 import qrCRUD from "@/lib/qr";
-import Empty from "@/components/EmptyUi";
-import { useDebounce } from "@uidotdev/usehooks";
+import dynamic from "next/dynamic";
 
+import { useDebounce } from "@uidotdev/usehooks";
 import { useQuery } from "@tanstack/react-query";
 import { QRCodeSVG } from "qrcode.react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -12,6 +12,10 @@ import { Button } from "@/components/ui/button";
 import { Code, Image, Trash } from "lucide-react";
 import { useSession } from "@clerk/nextjs";
 import { Input } from "@/components/ui/input";
+
+const Empty = dynamic(() => import("@/components/EmptyUi"), {
+    ssr: false,
+});
 
 export default function QRCodesPage() {
     const { getAllQR } = qrCRUD();
