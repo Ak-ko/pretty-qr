@@ -45,7 +45,7 @@ export default function NewQr() {
         return () => {
             clearTimeout(timeout);
         };
-    }, [qrLink]);
+    }, [qrLink, imgSrc]);
 
     return (
         <div>
