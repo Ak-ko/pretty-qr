@@ -47,7 +47,7 @@ export function AppSidebar() {
 
     return (
         <Sidebar>
-            <SidebarHeader className="py-5 bg-gray-400">
+            <SidebarHeader className="relative z-1 py-5 bg-sidebar-header">
                 <div className="flex items-center gap-3 justify-center">
                     <QrCodeIcon />
                     <h1 className="font-bold">Pretty QR</h1>
@@ -80,14 +80,14 @@ export function AppSidebar() {
                 </SidebarGroup>
             </SidebarContent>
 
-            <SidebarFooter>
+            <SidebarFooter className="relative z-1">
                 <Button
                     onClick={handleSignOut}
                     className="w-full flex items-center justify-center bg-red-500 hover:bg-red-700"
                 >
                     <div className="flex items-center gap-2">
-                        <LogOut />
-                        <span>Logout</span>
+                        <LogOut color="white" />
+                        <span className="text-white font-bold">Logout</span>
                     </div>
                 </Button>
             </SidebarFooter>
