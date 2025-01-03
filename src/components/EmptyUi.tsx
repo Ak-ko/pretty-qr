@@ -9,17 +9,19 @@ export default function Empty() {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const animation = lottie.loadAnimation({
-            container: containerRef.current as Element,
-            renderer: "svg",
-            loop: true,
-            autoplay: true,
-            animationData: animationData,
-        });
+        if (typeof window !== "undefined" && containerRef.current) {
+            const animation = lottie.loadAnimation({
+                container: containerRef.current as Element,
+                renderer: "svg",
+                loop: true,
+                autoplay: true,
+                animationData: animationData,
+            });
 
-        return () => {
-            animation.destroy();
-        };
+            return () => {
+                animation.destroy();
+            };
+        }
     }, []);
 
     return (
